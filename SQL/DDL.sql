@@ -54,8 +54,9 @@ create table book
      title varchar(20),
      num_pages smallint,
      price numeric(6,2),
+     quantity int,
      publisher_name varchar(20),
-     publisher_cut numeric(1,4),
+     publisher_cut numeric(4,4) check (publisher_cut>0 and publisher_cut<1),
      primary key(ISBN),
      foreign key(publisher_name) references publisher(name)
         on delete set null
