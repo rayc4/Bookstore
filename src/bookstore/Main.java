@@ -10,6 +10,7 @@ public class Main extends Application {
 	
     @Override
     public void start(Stage primaryStage) throws Exception{
+    	new SQL();
         Parent root = FXMLLoader.load(getClass().getResource("welcome.fxml"));
         primaryStage.setTitle("Look Inna Book");
         Scene scene = new Scene(root, 400, 300);

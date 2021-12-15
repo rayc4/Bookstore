@@ -9,9 +9,14 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.GridPane;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.scene.layout.VBox;
+
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Optional;
 
 public class OwnerController {
 
@@ -27,8 +32,47 @@ public class OwnerController {
     @FXML
     private Button addPubButton;
     
+    @FXML
+    private VBox booksVBox;
+    
     public void initialize(){
     	
+    	LinkedList<String> books = SQL.getBooks();
+    	for(String b : books) {
+    		Text t = new Text(b);
+    		t.setOnMouseClicked((evt)->{
+    			LinkedList<String> book = SQL.getBook(t.getText());
+    			ButtonType done = new ButtonType("Done", ButtonBar.ButtonData.OK_DONE);
+    			ButtonType remove = new ButtonType("Delete this book ", ButtonBar.ButtonData.CANCEL_CLOSE);	
+    			Alert a = new Alert(AlertType.CONFIRMATION, 
+    					"Title: "+ book.get(1) + "\n" +
+    					"Pages: "+ book.get(2) + "\n" +
+    					"Price: "+ book.get(3) + "\n" +
+    					"Quantity: "+ book.get(4) + "\n" +
+    					"Publisher: "+ book.get(5) + "\n" +
+    					"Publisher Cut: "+ book.get(6) + "\n"
+    					,done, remove);
+    			a.setTitle("ISBN: "+book.get(0)+"\n");
+    			
+    			Optional<ButtonType> res = a.showAndWait();
+    			if(res.get() == remove) {
+    				SQL.deleteBook(b);
+    				try {
+	    				Parent root = FXMLLoader.load(getClass().getResource("owner.fxml"));
+						Scene scene = new Scene(root, 800, 400);
+						scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+			    		Stage stage = (Stage) addBookButton.getScene().getWindow();
+			    		stage.setScene(scene);
+    				} catch (IOException e) {
+    					// TODO Auto-generated catch block
+    					e.printStackTrace();
+    				}
+    			}				
+    		});
+    		booksVBox.getChildren().add(t);
+    	}
+    	booksVBox.setSpacing(10);
+
     	addBookButton.setOnMouseClicked( (evt) -> {
 	    	ObservableList<Node> addBookChildren = addBookGP.getChildren();
 	    	ArrayList<String> bookInputs = new ArrayList<String>(7);
@@ -39,8 +83,8 @@ public class OwnerController {
 	    	}
 			if(bookInputs.contains("") || bookInputs.contains(null)) return;
 			
-			SQL s = new SQL();
-			boolean success = s.insertBook(bookInputs);
+			
+			boolean success = SQL.insertBook(bookInputs);
 			
 			Alert a = new Alert(AlertType.INFORMATION);
 			if(success) {
@@ -57,7 +101,17 @@ public class OwnerController {
 					}
 		    	}
 			});
-			a.show();
+			a.showAndWait();
+			try {
+				Parent root = FXMLLoader.load(getClass().getResource("owner.fxml"));
+				Scene scene = new Scene(root, 800, 400);
+				scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+	    		Stage stage = (Stage) addBookButton.getScene().getWindow();
+	    		stage.setScene(scene);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
     	});
     	
     	addPubButton.setOnMouseClicked( (evt) -> {
@@ -70,8 +124,7 @@ public class OwnerController {
 	    	}
 			if(pubInputs.contains("") || pubInputs.contains(null)) return;
 			
-			SQL s = new SQL();
-			boolean success = s.insertPublisher(pubInputs);
+			boolean success = SQL.insertPublisher(pubInputs);
 			
 			Alert a = new Alert(AlertType.INFORMATION);
 			if(success) {

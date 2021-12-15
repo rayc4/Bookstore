@@ -11,6 +11,8 @@ import java.io.IOException;
 
 public class WelcomeController {
 
+	public static String username;
+	
     @FXML
     private Button registerButton;
     
@@ -39,20 +41,29 @@ public class WelcomeController {
     	});
     	
     	loginButton.setOnMouseClicked( (evt) -> {
-			String username = usernameField.getText();
+			username = usernameField.getText();
 			String password = passwordField.getText();
 			
-			SQL s = new SQL();
-			int userType = s.login(username, password);
+			int userType = SQL.login(username, password);
 			if(userType == 0) {
 				Alert a = new Alert(AlertType.INFORMATION);
 				a.setContentText("username/password combination incorrect");
+				a.show();
 			}else if(userType == 1){
-				System.out.println("customer");
+				try {
+					Parent root = FXMLLoader.load(getClass().getResource("customer.fxml"));
+					Scene scene = new Scene(root, 600, 400);
+					scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+		    		Stage stage = (Stage) registerButton.getScene().getWindow();
+		    		stage.setScene(scene);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}else {
 				try {
 					Parent root = FXMLLoader.load(getClass().getResource("owner.fxml"));
-					Scene scene = new Scene(root, 400, 300);
+					Scene scene = new Scene(root, 800, 400);
 					scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 		    		Stage stage = (Stage) registerButton.getScene().getWindow();
 		    		stage.setScene(scene);

@@ -13,6 +13,7 @@ create table order_
     (id serial,
      username varchar(20),
      status varchar(20),
+     date date,
      shipping_address varchar(100),
      billing_address varchar(100),
      primary key(id),

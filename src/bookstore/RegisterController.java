@@ -46,8 +46,7 @@ public class RegisterController {
 			}
 			if(inputs.contains("") || inputs.contains(null)) return;
 			
-			SQL s = new SQL();
-			boolean success = s.insertUser(inputs);
+			boolean success = SQL.insertUser(inputs);
 			Alert a = new Alert(AlertType.INFORMATION);
 			if(success) {
 				a.setContentText("Account created");
