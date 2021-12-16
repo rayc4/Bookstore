@@ -35,6 +35,12 @@ public class OwnerController {
     @FXML
     private VBox booksVBox;
     
+    @FXML
+    private TextField genresTF;
+    
+    @FXML
+    private TextField authorsTF;
+    
     public void initialize(){
     	
     	LinkedList<String> books = SQL.getBooks();
@@ -74,6 +80,7 @@ public class OwnerController {
     	booksVBox.setSpacing(10);
 
     	addBookButton.setOnMouseClicked( (evt) -> {
+    		// populate books
 	    	ObservableList<Node> addBookChildren = addBookGP.getChildren();
 	    	ArrayList<String> bookInputs = new ArrayList<String>(7);
 	    	for (int i=0; i<14; ++i) {
@@ -84,7 +91,22 @@ public class OwnerController {
 			if(bookInputs.contains("") || bookInputs.contains(null)) return;
 			
 			
+			// insert into book
 			boolean success = SQL.insertBook(bookInputs);
+			
+			// insert into book_genre
+			String genres = genresTF.getText();
+			String[] genresArr = genres.split("[, ]+");
+			for (String genre : genresArr) {
+				SQL.insertBookGenre(bookInputs.get(0), genre);
+			}
+			
+			//insert into author
+			String authors = authorsTF.getText();
+			String[] names = authors.split("[, ]+");
+			for(int i=0; i<names.length; i+=2) {
+				SQL.insertAuthor(names[i], names[i+1], bookInputs.get(0));
+			}
 			
 			Alert a = new Alert(AlertType.INFORMATION);
 			if(success) {

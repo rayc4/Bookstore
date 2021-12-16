@@ -1,11 +1,13 @@
 package bookstore;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Optional;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -19,6 +21,8 @@ import javafx.stage.Stage;
 
 
 public class CustomerController {
+	
+	public static HashMap<String, Integer> order;
 	
 	@FXML
 	private VBox booksVBox;
@@ -61,6 +65,15 @@ public class CustomerController {
     	booksVBox.setSpacing(10);
     	
     	checkoutButton.setOnMouseClicked((evt)->{
+    		order = new HashMap<String,Integer>();
+    		int newVal;
+    		for(Node cartItem : cartVBox.getChildren()) { 			
+    			String strCartItem = ((Text)cartItem).getText();
+    			newVal = order.getOrDefault(strCartItem, 0);
+				order.put(strCartItem, newVal+1);
+    			System.out.println(strCartItem + ": " + String.valueOf(newVal+1));
+    		}
+    		
     		try {
 				Parent root = FXMLLoader.load(getClass().getResource("checkout.fxml"));
 				Scene scene = new Scene(root, 600, 400);

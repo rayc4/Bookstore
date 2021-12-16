@@ -28,13 +28,14 @@ public class CheckoutController {
 		orderButton.setOnMouseClicked((evt)->{
 			ArrayList<String> al = new ArrayList<String>(6);
 			ObservableList<Node> children = inputGP.getChildren();
-			
 			for (int i=0; i<4; ++i) {	
 				if(children.get(i) instanceof TextField) {
 					al.add( ((TextField)children.get(i)).getText() );
 				}
 	    	}
 			SQL.insertOrder(al);
+			
+			//SQL.insertBookOrder();
 			
 			Alert a = new Alert(AlertType.INFORMATION, "order made");
 			a.showAndWait();

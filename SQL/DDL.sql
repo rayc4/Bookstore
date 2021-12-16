@@ -66,7 +66,6 @@ create table book
 create table book_genre
     (ISBN char(13),
      genre varchar(20),
-     primary key(ISBN),
      foreign key(ISBN) references book
         on delete cascade
     );
@@ -74,6 +73,7 @@ create table book_genre
 create table book_order
     (order_id int,
      ISBN char(13),
+     quantity smallint,
      primary key(order_id, ISBN),
      foreign key(order_id) references order_
         on delete cascade,
@@ -83,10 +83,9 @@ create table book_order
 
 create table author
     (first_name varchar(20),
-     middle_name varchar(20),
      last_name varchar(20),
      ISBN char(13),
-     primary key(first_name, middle_name, last_name, ISBN),
+     primary key(first_name, last_name, ISBN),
      foreign key(ISBN) references book
         on delete cascade
     );

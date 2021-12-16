@@ -216,12 +216,79 @@ public class SQL {
 			for(int i=1; i<=6; ++i) {
 				res.add(rs.getString(i));
 			}
-
 			return res;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return null;
+		}
+	}
+	
+	public static boolean insertBookGenre(String isbn, String genre) {
+		try {
+			PreparedStatement ps = connection.prepareStatement(
+				"insert into book_genre values (?,?);"
+			);
+			ps.setString(1, isbn);
+			ps.setString(2, genre);
+			ps.executeUpdate();
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}
+	
+	public static boolean insertAuthor(String firstName, String lastName, String isbn) {
+		try {
+			PreparedStatement ps = connection.prepareStatement(
+				"insert into author values (?,?,?);"
+			);
+			ps.setString(1, firstName);
+			ps.setString(2, lastName);
+			ps.setString(3, isbn);
+			ps.executeUpdate();
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}
+	
+	public static boolean insertBookOrder(int orderId, String isbn, int quantity) {
+		try {
+			PreparedStatement ps = connection.prepareStatement(
+				"insert into book_genre values (?,?,?);"
+			);
+			ps.setInt(1, orderId);
+			ps.setString(2, isbn);
+			ps.setInt(3, quantity);
+			ps.executeUpdate();
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}
+	
+	public static int getMaxOrderId() {
+		try {
+			PreparedStatement ps = connection.prepareStatement(
+				"select max(id) from order_ ;"
+			);
+			ResultSet rs = ps.executeQuery();
+			rs.next();
+			return rs.getInt(1);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return -1;
 		}
 	}
 }
