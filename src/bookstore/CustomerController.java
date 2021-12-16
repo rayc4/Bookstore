@@ -71,7 +71,7 @@ public class CustomerController {
     			String strCartItem = ((Text)cartItem).getText();
     			newVal = order.getOrDefault(strCartItem, 0);
 				order.put(strCartItem, newVal+1);
-    			System.out.println(strCartItem + ": " + String.valueOf(newVal+1));
+    			//System.out.println(strCartItem + ": " + String.valueOf(newVal+1));
     		}
     		
     		try {

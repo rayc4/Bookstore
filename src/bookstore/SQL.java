@@ -262,7 +262,7 @@ public class SQL {
 	public static boolean insertBookOrder(int orderId, String isbn, int quantity) {
 		try {
 			PreparedStatement ps = connection.prepareStatement(
-				"insert into book_genre values (?,?,?);"
+				"insert into book_order values (?,?,?);"
 			);
 			ps.setInt(1, orderId);
 			ps.setString(2, isbn);

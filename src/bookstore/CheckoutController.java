@@ -2,6 +2,7 @@ package bookstore;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -35,7 +36,11 @@ public class CheckoutController {
 	    	}
 			SQL.insertOrder(al);
 			
-			//SQL.insertBookOrder();
+			HashMap<String, Integer> order = CustomerController.order;
+			for(String book : order.keySet()) {
+				SQL.insertBookOrder(SQL.getMaxOrderId(), book, order.get(book).intValue());
+			}
+			
 			
 			Alert a = new Alert(AlertType.INFORMATION, "order made");
 			a.showAndWait();
