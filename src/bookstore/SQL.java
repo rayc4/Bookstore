@@ -241,6 +241,26 @@ public class SQL {
 		return true;
 	}
 	
+	public static LinkedList<String> getGenres(String isbn){
+		try {
+			PreparedStatement ps = connection.prepareStatement(
+				"select genre from book_genre where isbn=?;"
+			);
+			ps.setString(1, isbn);
+			
+			LinkedList<String> res = new LinkedList<String>();
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()) {
+				res.add(rs.getString(1));
+			}
+			return res;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+	}
+
 	public static boolean insertAuthor(String firstName, String lastName, String isbn) {
 		try {
 			PreparedStatement ps = connection.prepareStatement(
@@ -257,6 +277,26 @@ public class SQL {
 			return false;
 		}
 		return true;
+	}
+	
+	public static LinkedList<String> getAuthors(String isbn){
+		try {
+			PreparedStatement ps = connection.prepareStatement(
+				"select first_name, last_name from author where isbn=?;"
+			);
+			ps.setString(1, isbn);
+			
+			LinkedList<String> res = new LinkedList<String>();
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()) {
+				res.add(rs.getString(1)+" "+rs.getString(2));
+			}
+			return res;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
 	}
 	
 	public static boolean insertBookOrder(int orderId, String isbn, int quantity) {

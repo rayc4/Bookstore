@@ -33,8 +33,14 @@ select * from order_ where id=?;
 -- insert into book genre
 insert into book_genre values (?,?);
 
+-- get genres of a given book
+select genre from book_genre where isbn=?;
+
 -- insert author
 insert into author values (?,?,?);
+
+-- get authors who wrote a given book
+select first_name, last_name from author where isbn=?;
 
 -- insert book_order
 insert into book_order values (?,?,?);

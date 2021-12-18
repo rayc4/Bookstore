@@ -44,14 +44,29 @@ public class CustomerController {
     			LinkedList<String> book = SQL.getBook(t.getText());
     			ButtonType cancel = new ButtonType("Done", ButtonBar.ButtonData.OK_DONE);
     			ButtonType add = new ButtonType("Add to cart", ButtonBar.ButtonData.CANCEL_CLOSE);	
-    			Alert a = new Alert(AlertType.CONFIRMATION, 
-    					"Title: "+ book.get(1) + "\n" +
-    					"Pages: "+ book.get(2) + "\n" +
-    					"Price: "+ book.get(3) + "\n" +
-    					"Quantity: "+ book.get(4) + "\n" +
-    					"Publisher: "+ book.get(5) + "\n" +
-    					"Publisher Cut: "+ book.get(6) + "\n"
-    					,add, cancel);
+    			String alertText =  "Title: "+ book.get(1) + "\n" +
+    								"Pages: "+ book.get(2) + "\n" +
+    								"Price: "+ book.get(3) + "\n" +
+    								"Quantity: "+ book.get(4) + "\n" +
+    								"Publisher: "+ book.get(5) + "\n" +
+    								"Publisher Cut: "+ book.get(6) + "\n" +
+    								"Authors: \n";
+    			
+    			// Get authors
+    			LinkedList<String> names = SQL.getAuthors(book.get(0));  			
+    			for(String n : names) {
+    				alertText += "\t" + n + "\n";
+    			}
+    			
+    			// Get genres
+    			LinkedList<String> genres = SQL.getGenres(book.get(0)); 
+    			alertText += "Genres: \n";
+    			for(String g : genres) {
+    				alertText += "\t" + g + "\n";
+    			}
+    			
+    			Alert a = new Alert(AlertType.CONFIRMATION, "",add, cancel);
+    			a.setContentText(alertText);
     			a.setTitle("ISBN: "+book.get(0)+"\n");
     			
     			Optional<ButtonType> res = a.showAndWait();
