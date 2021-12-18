@@ -1,5 +1,5 @@
 -- Decrease the corresponding book quantities when an order is placed by a user
-
+-- Rollback if not enough stock
 create function decrease_book_quantity()
 returns trigger
 language PLPGSQL
