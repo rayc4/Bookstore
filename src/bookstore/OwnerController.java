@@ -50,15 +50,31 @@ public class OwnerController {
     			LinkedList<String> book = SQL.getBook(t.getText());
     			ButtonType done = new ButtonType("Done", ButtonBar.ButtonData.OK_DONE);
     			ButtonType remove = new ButtonType("Delete this book ", ButtonBar.ButtonData.CANCEL_CLOSE);	
-    			Alert a = new Alert(AlertType.CONFIRMATION, 
-    					"Title: "+ book.get(1) + "\n" +
-    					"Pages: "+ book.get(2) + "\n" +
-    					"Price: "+ book.get(3) + "\n" +
-    					"Quantity: "+ book.get(4) + "\n" +
-    					"Publisher: "+ book.get(5) + "\n" +
-    					"Publisher Cut: "+ book.get(6) + "\n"
-    					,done, remove);
+    			
+    			String alertText =  "Title: "+ book.get(1) + "\n" +
+						"Pages: "+ book.get(2) + "\n" +
+						"Price: "+ book.get(3) + "\n" +
+						"Quantity: "+ book.get(4) + "\n" +
+						"Publisher: "+ book.get(5) + "\n" +
+						"Publisher Cut: "+ book.get(6) + "\n" +
+						"Authors: \n";
+	
+				// Get authors
+				LinkedList<String> names = SQL.getAuthors(book.get(0));  			
+				for(String n : names) {
+					alertText += "\t" + n + "\n";
+				}
+				
+				// Get genres
+				LinkedList<String> genres = SQL.getGenres(book.get(0)); 
+				alertText += "Genres: \n";
+				for(String g : genres) {
+					alertText += "\t" + g + "\n";
+				}
+    			
+    			Alert a = new Alert(AlertType.CONFIRMATION, "",done, remove);
     			a.setTitle("ISBN: "+book.get(0)+"\n");
+    			a.setContentText(alertText);
     			
     			Optional<ButtonType> res = a.showAndWait();
     			if(res.get() == remove) {
