@@ -1,17 +1,22 @@
--- Increase the corresponding book quantities when an order is placed by a user
-create trigger order_made 
-    after insert on book_order
-    for each row
-    execute procedure add_book_quantity();
+-- Decrease the corresponding book quantities when an order is placed by a user
 
-create function add_book_quantity()
+create function decrease_book_quantity()
 returns trigger
 language PLPGSQL
 AS $$
 begin
-    update book 
-    set quantity = quantity + new.quantity
-    where isbn = new.isbn;
-    return new;
+    if new.quantity > (select quantity from book where isbn=new.isbn) then
+        rollback;
+    else
+        update book 
+        set quantity = quantity - new.quantity
+        where isbn = new.isbn;
+        return new;
+    end if;
 end;
 $$;
+
+create trigger order_made 
+    before insert on book_order
+    for each row
+    execute procedure decrease_book_quantity();
