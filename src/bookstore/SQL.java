@@ -87,7 +87,6 @@ public class SQL {
 		return true;
 	}
 
-
 	public static boolean insertPublisher(ArrayList<String> values){
 		try {
 			PreparedStatement ps = connection.prepareStatement(
