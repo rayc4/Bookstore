@@ -1,4 +1,3 @@
-/*
-!.gitignore
-!SQL/**
-!src/**
+.classpath
+*.class
+bin/*
