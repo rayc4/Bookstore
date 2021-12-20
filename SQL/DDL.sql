@@ -16,6 +16,7 @@ create table order_
      date date,
      shipping_address varchar(100),
      billing_address varchar(100),
+     total numeric(10,2),
      primary key(id),
      foreign key(username) references user_
         on delete set null
