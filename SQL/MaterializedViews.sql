@@ -24,3 +24,16 @@ select genre, sum(book_revenue)::numeric(10,2) as revenue from book_genre natura
     from book join book_order using (isbn)
     group by isbn) as _
 group by genre;
+
+
+-- revenue per author last month
+create materialized view author_revenue as
+select first_name, last_name, sum(book_revenue)::numeric(10,2) as revenue from author natural join (
+	select isbn, (sum(book_order.quantity) * price) * (1 - publisher_cut) as book_revenue
+	from book join book_order using (isbn)
+	where order_id =
+		(select id from order_
+		where date >= date_trunc('month', CURRENT_DATE - interval '1' month)
+		and date < date_trunc('month', CURRENT_DATE))
+	group by isbn) as _
+group by first_name, last_name;
