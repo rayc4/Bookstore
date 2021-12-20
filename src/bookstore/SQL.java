@@ -2,8 +2,12 @@ package bookstore;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.math.BigDecimal;
+import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
 public class SQL {
 	private static Connection connection;
@@ -328,6 +332,31 @@ public class SQL {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return -1;
+		}
+	}
+	
+	public static HashMap<String, BigDecimal[]> getRevenueAndExpenditures(String start, String end) throws ParseException{
+		HashMap<String, BigDecimal[]> res = new HashMap<String, BigDecimal[]>();
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		try {
+			PreparedStatement ps = connection.prepareStatement(
+				"refresh materialized view date_revenue_expenditures;\n" +
+				"select * from date_revenue_expenditures " +
+				"where date between ? and ?;"
+			);
+			
+			ps.setDate(1, new Date(format.parse(start).getTime()));
+			ps.setDate(2, new Date(format.parse(end).getTime()));
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()) {
+				res.put(rs.getDate(1).toString(), new BigDecimal[]{rs.getBigDecimal(2), rs.getBigDecimal(3)} );
+			}
+			return res;
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
 		}
 	}
 }

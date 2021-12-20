@@ -101,6 +101,15 @@
             </ScrollPane>
          </children>
       </VBox>
-      <VBox prefHeight="200.0" prefWidth="100.0" />
+      <VBox alignment="CENTER" prefHeight="400.0" prefWidth="198.0" spacing="20.0">
+         <children>
+            <Label text="Start date (yyyy-mm-dd)" />
+            <TextField fx:id="startDateTF" />
+            <Label text="End date (yyyy-mm-dd)" />
+            <TextField fx:id="endDateTF" />
+            <Button fx:id="revexButton" mnemonicParsing="false" prefWidth="185.0" text="Get revenue and expenditures" />
+            <Button fx:id="genreButton" mnemonicParsing="false" text="Get revenue by genre" />
+            <Button fx:id="authorButton" mnemonicParsing="false" text="Get revenue by author" />
+         </children></VBox>
    </children>
 </HBox>

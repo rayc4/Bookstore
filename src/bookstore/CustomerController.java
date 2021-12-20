@@ -1,11 +1,9 @@
 package bookstore;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Optional;
-
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -121,6 +119,5 @@ public class CustomerController {
     		});
     		ordersVBox.getChildren().add(t);
     	}
-    	
 	}
 }

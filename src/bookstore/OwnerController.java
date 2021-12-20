@@ -41,6 +41,21 @@ public class OwnerController {
     @FXML
     private TextField authorsTF;
     
+    @FXML
+    private TextField startDateTF;
+    
+    @FXML
+    private TextField endDateTF;
+    
+    @FXML
+    private Button revexButton;
+    
+    @FXML
+    private Button genreButton;
+    
+    @FXML
+    private Button authorButton;
+    
     public void initialize(){
     	
     	LinkedList<String> books = SQL.getBooks();
