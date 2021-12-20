@@ -34,7 +34,7 @@ public class CheckoutController {
 					al.add( ((TextField)children.get(i)).getText() );
 				}
 	    	}
-			SQL.insertOrder(al);
+			SQL.insertOrder(al, CustomerController.total);
 			
 			HashMap<String, Integer> order = CustomerController.order;
 			for(String book : order.keySet()) {

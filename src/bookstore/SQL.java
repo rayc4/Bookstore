@@ -164,15 +164,15 @@ public class SQL {
 		return true;
 	}
 	
-	public static boolean insertOrder(ArrayList<String> al) {
+	public static boolean insertOrder(ArrayList<String> al, float total) {
 		try {
 			PreparedStatement ps = connection.prepareStatement(
-				"insert into order_ values (default,?,'pending','2021-01-01',?,?);"
+				"insert into order_ values (default,?,'pending','2021-01-01',?,?,?);"
 			);
 			ps.setString(1, WelcomeController.username);
 			ps.setString(2, al.get(0));
 			ps.setString(3, al.get(1));
-
+			ps.setBigDecimal(4, BigDecimal.valueOf(total));
 			ps.executeUpdate();
 			
 		} catch (SQLException e) {
@@ -212,7 +212,7 @@ public class SQL {
 			LinkedList<String> res = new LinkedList<String>();
 			ResultSet rs = ps.executeQuery();
 			rs.next();
-			for(int i=1; i<=6; ++i) {
+			for(int i=1; i<=7; ++i) {
 				res.add(rs.getString(i));
 			}
 			return res;

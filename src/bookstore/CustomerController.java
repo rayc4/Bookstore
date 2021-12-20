@@ -1,6 +1,7 @@
 package bookstore;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Optional;
@@ -24,6 +25,7 @@ public class CustomerController {
 	
 	public static HashMap<String, Integer> order;
 	
+	public static float total;
 	@FXML
 	private VBox booksVBox;
 	
@@ -37,6 +39,7 @@ public class CustomerController {
 	private VBox ordersVBox;
 	
 	public void initialize(){
+		total = 0f;
 		LinkedList<String> books = SQL.getBooks();
     	for(String b : books) {
     		Text t = new Text(b);
@@ -73,6 +76,7 @@ public class CustomerController {
     			if(res.get() == add) {
     				Text cartItem = new Text(b);
     				cartVBox.getChildren().add(cartItem);
+    				total += Float.parseFloat(book.get(3));
     			}				
     		});
     		booksVBox.getChildren().add(t);
@@ -86,7 +90,6 @@ public class CustomerController {
     			String strCartItem = ((Text)cartItem).getText();
     			newVal = order.getOrDefault(strCartItem, 0);
 				order.put(strCartItem, newVal+1);
-    			//System.out.println(strCartItem + ": " + String.valueOf(newVal+1));
     		}
     		
     		try {
@@ -110,7 +113,9 @@ public class CustomerController {
 						"status: " + order.get(1) + "\n" +
 						"date: " + order.get(2) + "\n" +
 						"shipping address: " + order.get(3) + "\n" +
-						"billing address: " + order.get(4) + "\n" );
+						"billing address: " + order.get(4) + "\n" +
+						"total: " + order.get(5) + "\n"
+						);
 				a.setTitle(order.get(0));
 				a.show();
     		});
