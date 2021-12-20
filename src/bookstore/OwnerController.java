@@ -14,7 +14,9 @@ import javafx.stage.Stage;
 import javafx.scene.layout.VBox;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Optional;
 
@@ -195,6 +197,49 @@ public class OwnerController {
 		    	}
 			});
 			a.show();
+    	});
+    	
+    	revexButton.setOnMouseClicked((evt)->{
+    		try {
+    			double[] res = SQL.getRevenueAndExpenditures(startDateTF.getText(), endDateTF.getText());
+				Alert a = new Alert(AlertType.INFORMATION, "revenue: "+res[0]+"\n expenditures: "+res[1]);
+				a.show();
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+    	});
+    	
+    	genreButton.setOnMouseClicked((evt)->{
+    		try {
+    			HashMap<String,Double> res = SQL.getRevenuesByGenre(startDateTF.getText(), endDateTF.getText());
+				Alert a = new Alert(AlertType.INFORMATION, "");
+				String s = "";
+				for(String k : res.keySet()) {
+					s += "genre: "+k+", revenue" + res.get(k) + "\n";
+				}
+				a.setContentText(s);
+				a.show();
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+    	});
+    	
+    	authorButton.setOnMouseClicked((evt)->{
+    		try {
+    			HashMap<String,Double> res = SQL.getRevenuesByAuthor(startDateTF.getText(), endDateTF.getText());
+				Alert a = new Alert(AlertType.INFORMATION, "");
+				String s = "";
+				for(String k : res.keySet()) {
+					s += "author: "+k+", revenue" + res.get(k) + "\n";
+				}
+				a.setContentText(s);
+				a.show();
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
     	});
     }
 }

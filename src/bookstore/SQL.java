@@ -227,6 +227,27 @@ public class SQL {
 		}
 	}
 	
+	public static LinkedList<String> getTitles(String orderId){
+		try {
+			PreparedStatement ps = connection.prepareStatement(
+				"select title from book_order join book on (book_order.isbn = book.isbn) " +
+				"where order_id = ?;"
+			);
+			ps.setInt(1, Integer.parseInt(orderId));
+			LinkedList<String> res = new LinkedList<String>();
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()) {
+				res.add(rs.getString(1));
+			}
+				
+			return res;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
 	public static boolean insertBookGenre(String isbn, String genre) {
 		try {
 			PreparedStatement ps = connection.prepareStatement(
@@ -335,21 +356,70 @@ public class SQL {
 		}
 	}
 	
-	public static HashMap<String, BigDecimal[]> getRevenueAndExpenditures(String start, String end) throws ParseException{
-		HashMap<String, BigDecimal[]> res = new HashMap<String, BigDecimal[]>();
-		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+	public static double[] getRevenueAndExpenditures(String start, String end) throws ParseException{
+		double[] res = new double[2];
 		try {
-			PreparedStatement ps = connection.prepareStatement(
-				"refresh materialized view date_revenue_expenditures;\n" +
-				"select * from date_revenue_expenditures " +
-				"where date between ? and ?;"
+			PreparedStatement ps = connection.prepareStatement("refresh materialized view date_revenue_expenditures;");
+			ps.executeUpdate();
+			ps = connection.prepareStatement(
+					"select sum(revenue) as revenue, sum(expenditures) as expenditures from date_revenue_expenditures " +
+					"where date between ? and ?; "
 			);
+			ps.setDate(1, Date.valueOf(start));
+			ps.setDate(2, Date.valueOf(end));
+			ResultSet rs = ps.executeQuery();
+			rs.next();
+			res[0] = rs.getDouble(1);
+			res[1] = rs.getDouble(2);
+			return res;
 			
-			ps.setDate(1, new Date(format.parse(start).getTime()));
-			ps.setDate(2, new Date(format.parse(end).getTime()));
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public static HashMap<String, Double> getRevenuesByGenre(String start, String end) throws ParseException{
+		HashMap<String, Double> res = new HashMap<String, Double>();
+		try {
+			PreparedStatement ps = connection.prepareStatement("refresh materialized view date_revenue_expenditures;");
+			ps.executeUpdate();
+			ps = connection.prepareStatement(
+					"select genre, sum(revenue) as revenue from date_genre_revenue " +
+					"where date between ? and ? " +
+					"group by genre; "
+			);
+			ps.setDate(1, Date.valueOf(start));
+			ps.setDate(2, Date.valueOf(end));
 			ResultSet rs = ps.executeQuery();
 			while(rs.next()) {
-				res.put(rs.getDate(1).toString(), new BigDecimal[]{rs.getBigDecimal(2), rs.getBigDecimal(3)} );
+				res.put(rs.getString(1), rs.getDouble(2));
+			}
+			return res;
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public static HashMap<String, Double> getRevenuesByAuthor(String start, String end) throws ParseException{
+		HashMap<String, Double> res = new HashMap<String, Double>();
+		try {
+			PreparedStatement ps = connection.prepareStatement("refresh materialized view date_author_revenue;");
+			ps.executeUpdate();
+			ps = connection.prepareStatement(
+					"select first_name, last_name, sum(revenue) as revenue from date_author_revenue " +
+					"where date between ? and ? " +
+					"group by first_name, last_name; "
+			);
+			ps.setDate(1, Date.valueOf(start));
+			ps.setDate(2, Date.valueOf(end));
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()) {
+				res.put(rs.getString(1) +" " +rs.getString(2), rs.getDouble(3));
 			}
 			return res;
 			

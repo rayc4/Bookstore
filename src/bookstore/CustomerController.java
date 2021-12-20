@@ -107,13 +107,18 @@ public class CustomerController {
     		Text t = new Text(orderId);
     		t.setOnMouseClicked((evt)->{
     			LinkedList<String> order = SQL.getOrder(orderId);
-				Alert a = new Alert(AlertType.INFORMATION,
-						"status: " + order.get(1) + "\n" +
-						"date: " + order.get(2) + "\n" +
-						"shipping address: " + order.get(3) + "\n" +
-						"billing address: " + order.get(4) + "\n" +
-						"total: " + order.get(5) + "\n"
-						);
+    			String s = "status: " + order.get(2) + "\n" +
+						"date: " + order.get(3) + "\n" +
+						"shipping address: " + order.get(4) + "\n" +
+						"billing address: " + order.get(5) + "\n" +
+						"total: " + order.get(6) + "\n"+
+						"Books: \n";
+    			LinkedList<String> titles = SQL.getTitles(orderId);
+    			for(String title : titles) {
+    				s += title + "\n";
+    			}
+				Alert a = new Alert(AlertType.INFORMATION, "");
+				a.setContentText(s);
 				a.setTitle(order.get(0));
 				a.show();
     		});
