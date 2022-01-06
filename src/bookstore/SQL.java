@@ -383,7 +383,7 @@ public class SQL {
 	public static HashMap<String, Double> getRevenuesByGenre(String start, String end) throws ParseException{
 		HashMap<String, Double> res = new HashMap<String, Double>();
 		try {
-			PreparedStatement ps = connection.prepareStatement("refresh materialized view date_revenue_expenditures;");
+			PreparedStatement ps = connection.prepareStatement("refresh materialized view date_genre_revenue;");
 			ps.executeUpdate();
 			ps = connection.prepareStatement(
 					"select genre, sum(revenue) as revenue from date_genre_revenue " +
